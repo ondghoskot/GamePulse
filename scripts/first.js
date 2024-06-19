@@ -1,10 +1,20 @@
-// express module
+// Import modules
 const express = require("express");
+const mongodb = require("mongodb");
 
-// start an instance in local
+// Start an instance in local
 const app = express();
-app.get("/", (req, res) => {
-    res.send("Home page");
+const connectionURL = "mongodb://localhost:27017";
+const client = new mongodb.MongoClient(connectionURL);
+
+// Establish database connection
+client
+.connect()
+.then(() => console.log("Database connection successful"))
+.catch((error) => console.log(error));
+
+app.use((error, req, res, next) => {
+    res.status(500).send(error.message);
 });
 
 // set the port
