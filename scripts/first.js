@@ -1,15 +1,14 @@
 // Import modules
 const express = require("express");
-const mongodb = require("mongodb");
+const mongoose = require("mongoose");
 
 // Start an instance in local
 const app = express();
-const connectionURL = "mongodb://localhost:27017";
-const client = new mongodb.MongoClient(connectionURL);
+app.use(express.json());
+const connectionURL = "mongodb://localhost:27017/GamePulsedb";
 
-// Establish database connection
-client
-.connect()
+// Connect to database
+mongoose.connect(connectionURL)
 .then(() => console.log("Database connection successful"))
 .catch((error) => console.log(error));
 
