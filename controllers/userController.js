@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const Token = require("../models/token");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -24,7 +25,12 @@ exports.login = async (req, res) => {
             return res.status(400).send({ error: "Invalid email or password"});
 
         const token = jwt.sign({ userId: user._id}, "secretkey");
-        res.send({ token });
+        const saveToken = new Token({
+            userId: user._id,
+            token: token
+        });
+        await saveToken.save();
+        res.send({ message: "Logged in successfully" });
     } catch (error) {
         res.status(400).send({message: error.message});
     }

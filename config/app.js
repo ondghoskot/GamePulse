@@ -6,6 +6,7 @@ const axios = require("axios");
 const userRoutes = require("../routes/users");
 const connectDb = require("./db");
 
+
 const httpsOptions = {
     key: fs.readFileSync("../certs/localhost.decrypted.key"),
     cert: fs.readFileSync("../certs/localhost.crt")
@@ -18,11 +19,8 @@ app.use(express.json());
 // create server
 const server = https.createServer(httpsOptions, app);
 
-// connect to db
-
-
 // testing
-app.use("/api/users", userRoutes);
+app.use("/", userRoutes);
 app.get("/", (req, res) => {
     res.send("hello world")
 });
@@ -31,4 +29,4 @@ app.use((error, req, res, next) => {
     res.status(500).send(error.message);
 });
 
-server.listen(3001, ()=>{ console.log("Listening on 3001") })
+server.listen(3001, ()=>{ console.log("Listening on 3001")});
