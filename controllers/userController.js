@@ -5,9 +5,9 @@ const jwt = require("jsonwebtoken");
 
 exports.signup = async (req, res) => {
     try {
-        const { username, email, password } = req.body;
+        const { email, password } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
-        const user = new User({username, email, password: hashedPassword});
+        const user = new User({email, password: hashedPassword});
         await user.save();
         res.status(201).send({message: "User registered successfully"});
     } catch (error) {
@@ -24,10 +24,12 @@ exports.login = async (req, res) => {
         if (!user || !isMatch)
             return res.status(400).send({ error: "Invalid email or password"});
 
-        const token = jwt.sign({ userId: user._id}, "secretkey");
+        const token = jwt.sign({ userId: user._id}, "secretkey", { expiresIn: '1h'});
+        const expiryDate = new Date( Date.now() + 3600000);
         const saveToken = new Token({
             userId: user._id,
-            token: token
+            token: token,
+            expiredAt: expiryDate
         });
         await saveToken.save();
         res.send({ message: "Logged in successfully" });
