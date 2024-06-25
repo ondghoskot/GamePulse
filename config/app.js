@@ -2,8 +2,8 @@
 const express = require("express");
 const fs = require("fs");
 const https = require("https");
-const axios = require("axios");
 const userRoutes = require("../routes/users");
+const gameRoutes = require("../routes/games");
 const connectDb = require("./db");
 
 
@@ -20,6 +20,7 @@ app.use(express.json());
 const server = https.createServer(httpsOptions, app);
 
 // testing
+app.use("/", gameRoutes);
 app.use("/", userRoutes);
 app.get("/", (req, res) => {
     res.send("hello world")
