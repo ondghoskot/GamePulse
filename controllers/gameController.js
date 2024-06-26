@@ -1,69 +1,119 @@
 const axios = require("axios");
 const Game = require("../models/game");
+const {fetchGenreNames, fetchPlatformNames, fetchCovers} = require("./fetch");
 
 const headers = {
     "Client-ID": "bkdjeiv6sne2h4ept0j15le07uotbx",
     "Authorization": "Bearer u3brly0vtmexbbqd3le7gy0jcay9qp"
 };
-
-const fetchGenreNames = async (genreIds, headers) => {
-    try {
-        const response = await axios.post(
-            "https://api.igdb.com/v4/genres",
-            `fields name; where id = (${genreIds.join(",")});`,
-            { headers }
-        );
-        return response.data.reduce((acc, genre) => {
-            acc[genre.id] = genre.name;
-            return acc;
-        }, {});
-    } catch (error) {
-        console.error("Error fetching genres:", error.message);
-        return {};
-    }
-};
-
-const fetchPlatformNames = async (platformIds, headers) => {
-    try {
-        const response = await axios.post(
-            "https://api.igdb.com/v4/platforms",
-            `fields name; where id = (${platformIds.join(",")});`,
-            { headers }
-        );
-        return response.data.reduce((acc, platform) => {
-            acc[platform.id] = platform.name;
-            return acc;
-        }, {});
-    } catch (error) {
-        console.error("Error fetching platforms:", error.message);
-        return {};
-    }
-};
-
-
 exports.getGames = async (req, res) => {
     try {
         const response = await axios.post(
             "https://api.igdb.com/v4/games",
-            "fields name, first_release_date, genres, platforms, summary, rating; limit 50;",
+            "fields name, first_release_date, genres, platforms, summary, total_rating, cover; limit 10; sort total_rating desc;",
             { headers }
         );
         const gamesData = response.data;
 
         const genreIds = [...new Set(gamesData.flatMap(game => game.genres || []))];
         const platformIds = [...new Set(gamesData.flatMap(game => game.platforms || []))];
+        const coverIds = [...new Set(gamesData.map(game => game.cover).filter(Boolean))];
 
         const genreNames = await fetchGenreNames(genreIds, headers);
         const platformNames = await fetchPlatformNames(platformIds, headers);
+        const coverUrls = await fetchCovers(coverIds);
 
-        const saveGames = gamesData.map(game => ({
-            title: game.name,
-            releaseDate: game.first_release_date ? new Date(game.first_release_date * 1000) : null,
-            genres: game.genres && game.genres.length > 0 ? game.genres.map(id => genreNames[id] || "Unknown").join(", ") : "Unknown",
-            platforms: game.platforms && game.platforms.length > 0 ? game.platforms.map(id => platformNames[id] || "Unknown").join(", ") : "Unknown",
-            summary: game.summary || "No summary available",
-            rating: game.rating !== undefined ? game.rating.toFixed(2) : "-1"
-         }));
+        const saveGames = gamesData.map(game => {
+            const coverData = coverUrls[game.cover];
+            return {
+                title: game.name,
+                img: coverUrls[game.cover] || "No cover available",
+                releaseDate: game.first_release_date ? new Date(game.first_release_date * 1000) : null,
+                genres: game.genres && game.genres.length > 0 ? game.genres.map(id => genreNames[id] || "Unknown").join(", ") : "Unknown",
+                platforms: game.platforms && game.platforms.length > 0 ? game.platforms.map(id => platformNames[id] || "Unknown").join(", ") : "Unknown",
+                summary: game.summary || "No summary available",
+                rating: game.total_rating !== undefined ? Math.floor(game.total_rating / 20) : "-1"
+            }
+         });
+
+         await Game.insertMany(saveGames);
+
+         res.json(saveGames);
+
+    } catch (error) {
+        res.status(500).send({error: error.message});
+    }
+};
+
+exports.getMostPlayed = async (req, res) => {
+    try {
+        const response = await axios.post(
+            "https://api.igdb.com/v4/games",
+            "fields name, first_release_date, genres, platforms, summary, cover, total_rating, total_rating_count; sort total_rating_count desc; limit 10;",
+            { headers }
+        );
+        const gamesData = response.data;
+
+        const genreIds = [...new Set(gamesData.flatMap(game => game.genres || []))];
+        const platformIds = [...new Set(gamesData.flatMap(game => game.platforms || []))];
+        const coverIds = [...new Set(gamesData.map(game => game.cover).filter(Boolean))];
+
+        const genreNames = await fetchGenreNames(genreIds, headers);
+        const platformNames = await fetchPlatformNames(platformIds, headers);
+        const coverUrls = await fetchCovers(coverIds);
+
+        const saveGames = gamesData.map(game => {
+            const coverData = coverUrls[game.cover];
+            return {
+                title: game.name,
+                img: coverUrls[game.cover] || "No cover available",
+                releaseDate: game.first_release_date ? new Date(game.first_release_date * 1000) : null,
+                genres: game.genres && game.genres.length > 0 ? game.genres.map(id => genreNames[id] || "Unknown").join(", ") : "Unknown",
+                platforms: game.platforms && game.platforms.length > 0 ? game.platforms.map(id => platformNames[id] || "Unknown").join(", ") : "Unknown",
+                summary: game.summary || "No summary available",
+                rating: game.total_rating !== undefined ? Math.floor(game.total_rating / 20) : "-1"
+                
+            }
+         });
+
+         await Game.insertMany(saveGames);
+
+         res.json(saveGames);
+
+    } catch (error) {
+        res.status(500).send({error: error.message});
+    }
+};
+
+exports.getTopRated = async (req, res) => {
+    try {
+        const response = await axios.post(
+            "https://api.igdb.com/v4/games",
+            "fields name, first_release_date, genres, platforms, summary, total_rating, cover; limit 5; sort total_rating desc;",
+            { headers }
+        );
+        const gamesData = response.data;
+
+        const genreIds = [...new Set(gamesData.flatMap(game => game.genres || []))];
+        const platformIds = [...new Set(gamesData.flatMap(game => game.platforms || []))];
+        const coverIds = [...new Set(gamesData.map(game => game.cover).filter(Boolean))];
+
+        const genreNames = await fetchGenreNames(genreIds, headers);
+        const platformNames = await fetchPlatformNames(platformIds, headers);
+        const coverUrls = await fetchCovers(coverIds);
+
+        const saveGames = gamesData.map(game => {
+            const coverData = coverUrls[game.cover];
+            return {
+                title: game.name,
+                img: coverUrls[game.cover] || "No cover available",
+                releaseDate: game.first_release_date ? new Date(game.first_release_date * 1000) : null,
+                genres: game.genres && game.genres.length > 0 ? game.genres.map(id => genreNames[id] || "Unknown").join(", ") : "Unknown",
+                platforms: game.platforms && game.platforms.length > 0 ? game.platforms.map(id => platformNames[id] || "Unknown").join(", ") : "Unknown",
+                summary: game.summary || "No summary available",
+                rating: game.total_rating !== undefined ? Math.floor(game.total_rating / 20) : "-1"
+            }
+         });
 
          await Game.insertMany(saveGames);
 
@@ -75,11 +125,10 @@ exports.getGames = async (req, res) => {
 };
 
 exports.getGameDetails = async (req, res) => {
-    const { gameId } = req.params;
     try {
         const response = await axios.post(
             "https://api.igdb.com/v4/games",
-            `fields name, first_release_date, genres, platforms, storyline, summary, rating; where id = ${gameId}`,
+            `fields name, cover, first_release_date, genres, platforms, storyline, summary, rating; where id = ${req.params}`,
             { headers }
         );
         const gameData = response.data[0];

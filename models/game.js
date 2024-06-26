@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const gameSchema = mongoose.Schema({
     title: String,
-    // cover: Image,
+    img: String,
     releaseDate: Date,
     genre: String,
     platforms: [String],
