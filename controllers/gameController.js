@@ -10,7 +10,7 @@ exports.getGames = async (req, res) => {
     try {
         const response = await axios.post(
             "https://api.igdb.com/v4/games",
-            "fields name, first_release_date, genres, platforms, summary, total_rating, cover; limit 10;",
+            "fields id, name, first_release_date, genres, platforms, summary, total_rating, cover; limit 10;",
             { headers }
         );
         const gamesData = response.data;
@@ -25,6 +25,7 @@ exports.getGames = async (req, res) => {
 
         const saveGames = gamesData.map(game => {
             return {
+                id: game.id,
                 title: game.name,
                 img: coverUrls[game.cover] || "No cover available",
                 releaseDate: game.first_release_date ? new Date(game.first_release_date * 1000) : null,
@@ -158,3 +159,16 @@ exports.getGameDetails = async (req, res) => {
         res.status(500).send({error: error.message});
     }
 };
+
+exports.searchGames = async (req, res) => {
+    try{
+        const { query } = req.query;
+        if (!query) {
+            return res.status(400).send({ error: 'Query parameter is required' });
+        }
+        const games = await Game.find({ $text: { $search: query } });
+        res.send(games);
+    } catch (error) {
+        res.status(500).send({ error: error.message });
+    }
+}

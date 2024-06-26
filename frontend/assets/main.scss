@@ -1,0 +1,67 @@
+body{
+    background-color: black;
+    color: #fff;
+    font-family: "Inconsolata", monospace;
+    overflow-x: hidden;
+}
+.position{
+        &-relative{
+            position: relative;
+        }
+        &-absolute {
+            position: absolute;
+        }
+        &-sticky {
+            position: sticky;
+        }
+}
+.hooper-next,
+.hooper-prev {
+    background-color: #15151580 !important;
+}
+.bg-dark{
+    background: #151515;
+}
+
+@for $i from 1 through 10 {
+    .p-#{$i} {
+       padding: #{$i}+'rem';
+    }
+    .pt-#{$i} {
+      padding-top: #{$i}+'rem';
+    }
+    .pb-#{$i} {
+      padding-bottom: #{$i}+'rem';
+    }
+}
+.text{
+    &-sm{
+        font-size: 10px;
+        font-weight: 600;
+    }
+        &-md {
+            font-size: 12px;
+        }
+    &-left{
+        text-align: left;
+    }
+    &-overflow{
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 9;
+        overflow: hidden;
+    }
+}
+hr{
+    border-color: #444;
+}
+.close_icon:after{
+  display: inline-block;
+  content: "\00d7"; /* This will render the 'X' */
+  font-size: 2rem;
+  position: absolute;
+  top: .25rem;
+  right: .25rem;
+  cursor: pointer;
+  color: #666;
+}

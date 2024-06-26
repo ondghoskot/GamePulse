@@ -4,10 +4,18 @@ const gameSchema = mongoose.Schema({
     title: String,
     img: String,
     releaseDate: Date,
-    genre: String,
+    genres: [String],
     platforms: [String],
     summary: String,
-    rating: Number
+    storyline: String,
+    rating: Number,
+    screenshots: [String]
+});
+
+gameSchema.index({
+    title: 'text',
+    genre: 'text',
+    platform: 'text'
 });
 
 module.exports = mongoose.model("Game", gameSchema);
