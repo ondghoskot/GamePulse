@@ -5,11 +5,13 @@ const https = require("https");
 const userRoutes = require("../routes/users");
 const gameRoutes = require("../routes/games");
 const connectDb = require("./db");
+require('dotenv').config();
+
 
 
 const httpsOptions = {
-    key: fs.readFileSync("./certs/localhost.decrypted.key"),
-    cert: fs.readFileSync("./certs/localhost.crt")
+    key: fs.readFileSync("backend/certs/localhost.decrypted.key"),
+    cert: fs.readFileSync("backend/certs/localhost.crt")
 };
 
 // start instance
@@ -30,4 +32,4 @@ app.use((error, req, res, next) => {
     res.status(500).send(error.message);
 });
 
-server.listen(3001, ()=>{ console.log("Listening on 3001")});
+server.listen(process.env.PORT, ()=>{ console.log(`Listening on ${process.env.PORT}`)});

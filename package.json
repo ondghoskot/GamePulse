@@ -4,7 +4,7 @@
   "description": "",
   "main": "first.js",
   "scripts": {
-    "start": "nodemon ./config/app.js"
+    "start": "nodemon ./backend/config/app.js"
   },
   "author": "",
   "license": "ISC",

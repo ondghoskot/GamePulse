@@ -1,15 +1,20 @@
 const axios = require("axios");
 const Game = require("../models/game");
 const {fetchGenreNames, fetchPlatformNames, fetchCovers, fetchCover, fetchSs} = require("./fetch");
+require('dotenv').config();
+
 
 const headers = {
-    "Client-ID": "bkdjeiv6sne2h4ept0j15le07uotbx",
-    "Authorization": "Bearer u3brly0vtmexbbqd3le7gy0jcay9qp"
+    "Client-ID": process.env.CLIENT_ID,
+    "Authorization": `Bearer ${process.env.AUTHORIZATION}`
 };
+
+const URL = process.env.IGDB_API_URL;
+
 exports.getGames = async (req, res) => {
     try {
         const response = await axios.post(
-            "https://api.igdb.com/v4/games",
+            `${URL}/games`,
             "fields id, name, first_release_date, genres, platforms, summary, total_rating, cover; limit 10;",
             { headers }
         );
@@ -48,7 +53,7 @@ exports.getGames = async (req, res) => {
 exports.getMostPlayed = async (req, res) => {
     try {
         const response = await axios.post(
-            "https://api.igdb.com/v4/games",
+            `${URL}/games`,
             "fields name, first_release_date, genres, platforms, summary, cover, total_rating, total_rating_count; sort total_rating_count desc; limit 10;",
             { headers }
         );
@@ -87,7 +92,7 @@ exports.getMostPlayed = async (req, res) => {
 exports.getTopRated = async (req, res) => {
     try {
         const response = await axios.post(
-            "https://api.igdb.com/v4/games",
+            `${URL}/games`,
             "fields name, first_release_date, genres, platforms, summary, total_rating, cover; limit 5; sort total_rating desc;",
             { headers }
         );
@@ -125,7 +130,7 @@ exports.getTopRated = async (req, res) => {
 exports.getGameDetails = async (req, res) => {
     try {
         const response = await axios.post(
-            "https://api.igdb.com/v4/games",
+            `${URL}/games`,
             `fields name, first_release_date, genres, platforms, summary, storyline, total_rating, cover, screenshots; where id = ${req.params.id};`,
             { headers }
         );

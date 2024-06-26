@@ -1,14 +1,17 @@
 const axios = require("axios");
+require('dotenv').config();
 
 const headers = {
-    "Client-ID": "bkdjeiv6sne2h4ept0j15le07uotbx",
-    "Authorization": "Bearer u3brly0vtmexbbqd3le7gy0jcay9qp"
+    "Client-ID": process.env.CLIENT_ID,
+    "Authorization": `Bearer ${process.env.AUTHORIZATION}`
 };
+
+const URL = process.env.IGDB_API_URL;
 
 const fetchGenreNames = async (genreIds, headers) => {
     try {
         const response = await axios.post(
-            "https://api.igdb.com/v4/genres",
+            `${URL}/genres`,
             `fields name; where id = (${genreIds.join(",")});`,
             { headers }
         );
@@ -25,7 +28,7 @@ const fetchGenreNames = async (genreIds, headers) => {
 const fetchPlatformNames = async (platformIds, headers) => {
     try {
         const response = await axios.post(
-            "https://api.igdb.com/v4/platforms",
+            `${URL}/platforms`,
             `fields name; where id = (${platformIds.join(",")});`,
             { headers }
         );
@@ -42,7 +45,7 @@ const fetchPlatformNames = async (platformIds, headers) => {
 const fetchCovers = async (coverIds) => {
     try {
         const response = await axios.post(
-            "https://api.igdb.com/v4/covers",
+            `${URL}/covers`,
             `fields url; where id = (${coverIds.join(",")});`,
             { headers }
         );
@@ -62,7 +65,7 @@ const fetchCovers = async (coverIds) => {
 const fetchCover = async (coverId) => {
     try {
         const response = await axios.post(
-            "https://api.igdb.com/v4/covers",
+            `${URL}/covers`,
             `fields url; where id = ${coverId};`,
             { headers }
         );
@@ -83,7 +86,7 @@ const fetchCover = async (coverId) => {
 const fetchSs = async (ssIds) => {
     try {
         const response = await axios.post(
-            "https://api.igdb.com/v4/screenshots",
+            `${URL}/screenshots`,
             `fields url; where id = (${ssIds.join(",")});`,
             { headers }
         );

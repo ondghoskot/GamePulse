@@ -27,7 +27,7 @@ export default {
     { src: "~/plugins/carousel", mode: "client" },
   ],
   axios: {
-    baseURL: "https://api.nuxtjs.dev",
+    baseURL: "https://localhost:3001",
   },
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
