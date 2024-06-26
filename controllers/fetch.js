@@ -58,4 +58,40 @@ const fetchCovers = async (coverIds) => {
         return {};
     }
 };
-module.exports = { fetchGenreNames, fetchPlatformNames, fetchCovers };
+
+const fetchCover = async (coverId) => {
+    try {
+        const response = await axios.post(
+            "https://api.igdb.com/v4/covers",
+            `fields url; where id = ${coverId};`,
+            { headers }
+        );
+
+        if (response.data.length === 0) {
+            return { [coverId]: "No cover available" };
+        }
+
+        const coverUrl = {};
+        coverUrl[coverId] = response.data[0].url;
+        return coverUrl;
+    } catch (error) {
+        console.error("Error fetching covers:", error.message);
+        return { [coverId]: "No cover available" };
+    }
+};
+
+const fetchSs = async (ssIds) => {
+    try {
+        const response = await axios.post(
+            "https://api.igdb.com/v4/screenshots",
+            `fields url; where id = (${ssIds.join(",")});`,
+            { headers }
+        );
+        return response.data.map(screenshot => screenshot.url);
+    } catch (error) {
+        console.error("Error fetching screenshots:", error.message);
+        return {};
+    }
+};
+
+module.exports = { fetchGenreNames, fetchPlatformNames, fetchCovers, fetchCover, fetchSs };

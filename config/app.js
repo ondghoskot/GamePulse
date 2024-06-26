@@ -8,8 +8,8 @@ const connectDb = require("./db");
 
 
 const httpsOptions = {
-    key: fs.readFileSync("../certs/localhost.decrypted.key"),
-    cert: fs.readFileSync("../certs/localhost.crt")
+    key: fs.readFileSync("./certs/localhost.decrypted.key"),
+    cert: fs.readFileSync("./certs/localhost.crt")
 };
 
 // start instance

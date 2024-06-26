@@ -14,7 +14,6 @@ const authMiddleware = async (req, res, next) => {
         if (findToken.expiredAt < Date.now()) {
             throw new Error("Token expired");
         }
-
         req.user = verify;
         next();
     } catch (error) {

@@ -37,3 +37,17 @@ exports.login = async (req, res) => {
         res.status(400).send({message: error.message});
     }
 };
+
+exports.getProfile = async (req, res) => {
+    try {
+        const userId = req.user.userId;
+        const user = await User.findById(userId).select('-password');
+
+        if (!user) {
+            return res.status(404).send({ error: 'User not found' });
+        }
+        res.send(user);
+    } catch (error) {
+        res.status(500).send({ error: error.message });
+    }
+};

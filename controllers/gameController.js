@@ -1,6 +1,6 @@
 const axios = require("axios");
 const Game = require("../models/game");
-const {fetchGenreNames, fetchPlatformNames, fetchCovers} = require("./fetch");
+const {fetchGenreNames, fetchPlatformNames, fetchCovers, fetchCover, fetchSs} = require("./fetch");
 
 const headers = {
     "Client-ID": "bkdjeiv6sne2h4ept0j15le07uotbx",
@@ -10,7 +10,7 @@ exports.getGames = async (req, res) => {
     try {
         const response = await axios.post(
             "https://api.igdb.com/v4/games",
-            "fields name, first_release_date, genres, platforms, summary, total_rating, cover; limit 10; sort total_rating desc;",
+            "fields name, first_release_date, genres, platforms, summary, total_rating, cover; limit 10;",
             { headers }
         );
         const gamesData = response.data;
@@ -24,7 +24,6 @@ exports.getGames = async (req, res) => {
         const coverUrls = await fetchCovers(coverIds);
 
         const saveGames = gamesData.map(game => {
-            const coverData = coverUrls[game.cover];
             return {
                 title: game.name,
                 img: coverUrls[game.cover] || "No cover available",
@@ -63,7 +62,6 @@ exports.getMostPlayed = async (req, res) => {
         const coverUrls = await fetchCovers(coverIds);
 
         const saveGames = gamesData.map(game => {
-            const coverData = coverUrls[game.cover];
             return {
                 title: game.name,
                 img: coverUrls[game.cover] || "No cover available",
@@ -103,7 +101,6 @@ exports.getTopRated = async (req, res) => {
         const coverUrls = await fetchCovers(coverIds);
 
         const saveGames = gamesData.map(game => {
-            const coverData = coverUrls[game.cover];
             return {
                 title: game.name,
                 img: coverUrls[game.cover] || "No cover available",
@@ -128,7 +125,7 @@ exports.getGameDetails = async (req, res) => {
     try {
         const response = await axios.post(
             "https://api.igdb.com/v4/games",
-            `fields name, cover, first_release_date, genres, platforms, storyline, summary, rating; where id = ${req.params}`,
+            `fields name, first_release_date, genres, platforms, summary, storyline, total_rating, cover, screenshots; where id = ${req.params.id};`,
             { headers }
         );
         const gameData = response.data[0];
@@ -136,18 +133,28 @@ exports.getGameDetails = async (req, res) => {
         if (!gameData)
             return res.status(404).send({ error: "Game not found"});
 
+
+        const genreNames = await fetchGenreNames(gameData.genres || [], headers);
+        const platformNames = await fetchPlatformNames(gameData.platforms || [], headers);
+        const coverUrl = await fetchCover(gameData.cover);
+        const ssUrls = await fetchSs(gameData.screenshots);
+
+
         const gameDetails = {
             title: gameData.name,
+            img: coverUrl[gameData.cover] || "No cover available",
             releaseDate: gameData.first_release_date ? new Date(gameData.first_release_date * 1000) : null,
-            genres: gameData.genres && gameData.genres.length > 0 ? gameData.genres.join(", ") : "Uknown",
-            platforms: gameData.platforms || [],
+            genres: gameData.genres && gameData.genres.length > 0 ? gameData.genres.map(id => genreNames[id] || "Unknown").join(", ") : "Unknown",
+            platforms: gameData.platforms && gameData.platforms.length > 0 ? gameData.platforms.map(id => platformNames[id] || "Unknown").join(", ") : "Unknown",
             summary: gameData.summary || "No summary available",
             storyline: gameData.storyline || "No storyline available",
-            rating: gameData.rating !== undefined ? gameData.rating.toFixed(2) : "-1"
+            rating: gameData.total_rating !== undefined ? Math.floor(gameData.total_rating / 20) : "-1",
+            screenshots: ssUrls.length > 0 ? ssUrls : "No screenshots available"
         };
          const saveGameDetails = await Game.create(gameDetails);
          res.json(saveGameDetails);
     } catch (error) {
+        console.error('Error fetching game data:', error.response ? error.response.data : error.message);
         res.status(500).send({error: error.message});
     }
 };
