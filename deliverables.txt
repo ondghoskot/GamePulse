@@ -1,0 +1,39 @@
+** Authentication **
+- /forgot_password
+- Name + last name
+- /profile { favorites (list), reviews }
+
+** Games **
+- /games => Games [0...n] {
+    title: String,
+    cover: image,
+    releaseDate: Date,
+    genre: String,
+    platforms: [String],
+    summary: String,
+    rating: Number
+};
+- pagination
+- /games/:id => Game [0...n] {
+    title: String,
+    cover: image,
+    releaseDate: Date,
+    genre: String,
+    platforms: [String],
+    summary: String,
+    rating: Number
+    reviews: [String],
+    screenshots: [images],
+    storyline: String,
+    ...
+};
+- /search 
+
+** Lists **
+- /favorites { getFavorites, removeFromFav}
+- /profile
+
+** Reviews **
+- /profile
+- /home
+- /games/id

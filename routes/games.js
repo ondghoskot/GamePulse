@@ -2,7 +2,8 @@ const express = require("express");
 const gameController = require("../controllers/gameController");
 const router = express.Router();
 
-router.get("/titles", gameController.titles);
-// router.get("/genres", gameController.genres);
+router.get("/games", gameController.getGames);
+router.get("/games/:gameId", gameController.getGameDetails);
+// router.get("/search", gameController.searchGames);
 
 module.exports = router;
