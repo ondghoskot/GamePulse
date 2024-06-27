@@ -118,16 +118,16 @@ export default {
     }
   },
   async asyncData({ params, $axios}) {
-    // if (params.id) {
-    //   try {
-    //     let details = await $axios.$get("/games/" + id);
-    //     if (details) {
-    //      return { game: details};
-    //     }
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
-    // }
+     if (params.id) {
+       try {
+         let details = await $axios.$get("/games/" + id);
+         if (details) {
+          return { game: details};
+         }
+       } catch (err) {
+         console.log(err);
+       }
+     }
   },
 };
 </script>

@@ -5,18 +5,23 @@ const https = require("https");
 const userRoutes = require("../routes/users");
 const gameRoutes = require("../routes/games");
 const connectDb = require("./db");
+const cors = require('cors');
 require('dotenv').config();
 
 
 
 const httpsOptions = {
-    key: fs.readFileSync("backend/certs/localhost.decrypted.key"),
-    cert: fs.readFileSync("backend/certs/localhost.crt")
+    key: fs.readFileSync("frontend/GamePulse/backend/certs/localhost.decrypted.key"),
+    cert: fs.readFileSync("frontend/GamePulse/backend/certs/localhost.crt")
 };
 
 // start instance
 const app = express();
 app.use(express.json());
+app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true
+  }));
 
 // create server
 const server = https.createServer(httpsOptions, app);

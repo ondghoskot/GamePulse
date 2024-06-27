@@ -9,7 +9,8 @@ const gameSchema = mongoose.Schema({
     summary: String,
     storyline: String,
     rating: Number,
-    screenshots: [String]
+    screenshots: [String],
+    reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review"}]
 });
 
 gameSchema.index({
