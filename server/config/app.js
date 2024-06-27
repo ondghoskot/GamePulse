@@ -9,17 +9,16 @@ const cors = require('cors');
 require('dotenv').config();
 
 
-
 const httpsOptions = {
-    key: fs.readFileSync("frontend/GamePulse/backend/certs/localhost.decrypted.key"),
-    cert: fs.readFileSync("frontend/GamePulse/backend/certs/localhost.crt")
+    key: fs.readFileSync("./server/certs/localhost.decrypted.key"),
+    cert: fs.readFileSync("./server/certs/localhost.crt")
 };
 
 // start instance
 const app = express();
 app.use(express.json());
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: "http://localhost:3000",
     credentials: true
   }));
 
