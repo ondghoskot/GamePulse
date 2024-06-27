@@ -11,8 +11,8 @@ require('dotenv').config();
 
 
 const httpsOptions = {
-    key: fs.readFileSync("frontend/GamePulse/backend/certs/localhost.decrypted.key"),
-    cert: fs.readFileSync("frontend/GamePulse/backend/certs/localhost.crt")
+    key: fs.readFileSync("./backend/certs/localhost.decrypted.key"),
+    cert: fs.readFileSync("./backend/certs/localhost.crt")
 };
 
 // start instance
