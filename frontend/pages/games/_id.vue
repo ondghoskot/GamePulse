@@ -95,12 +95,12 @@ export default {
       ratingData: 0,
       game: {
         title: "Hollow Knight",
-        rating: 4.1,
-        releaseDate: "2015-03-22",
-        platforms: "Linux, PC (Microsoft Windows), Mac, Android",
+        rating: 4.8,
+        releaseDate: "2015-03-2",
+        platforms: "Nintendo Switch, Playstation 4, PC, Xbox",
         img: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/367520/capsule_616x353.jpg?t=1695270428",
         summary:
-          "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+          "Brave the Depths of a Forgotten Kingdom\nBeneath the fading town of Dirtmouth sleeps a vast, ancient kingdom. Many are drawn beneath the surface, searching for riches, or glory, or answers to old secrets.\n\nAs the enigmatic Knight, you’ll traverse the depths, unravel its mysteries and conquer its evils",
       },
     };
   },

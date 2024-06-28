@@ -32,7 +32,7 @@ exports.login = async (req, res) => {
             expiredAt: expiryDate
         });
         await saveToken.save();
-        res.send({ message: "Logged in successfully" });
+        res.send({ token });
     } catch (error) {
         res.status(400).send({message: error.message});
     }

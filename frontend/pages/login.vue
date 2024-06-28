@@ -13,7 +13,7 @@
         />
         <input type="submit" label="Login" @click="login" />
         <p class="text-md">
-          Don't have an account? br
+          Don't have an account?
           <a href="/register">Sign up here</a>
         </p>
       </form>
@@ -21,6 +21,7 @@
   </div>
 </template>
 <script>
+
 export default {
   auth:false,
   data() {
@@ -33,12 +34,12 @@ export default {
     async login() {
       try {
         let response = await this.$axios.$post("/login", {
-          email: this.emailLogin,
-          password: this.passwordLogin,
+          "email": this.emailLogin,
+          "password": this.passwordLogin,
         });
 
         if (response.statusCode == 200) {
-          this.$cookies.set(env.SSO_COOKIE_NAME, response.data.jwt, {
+          this.$cookies.set(process.env.SSO_COOKIE_NAME, response.data.jwt, {
             path: '/',
             maxAge: 60 * 60 * 24 * 7
           });

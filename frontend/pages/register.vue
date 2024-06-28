@@ -45,10 +45,10 @@ export default {
     async register() {
       try {
         let response = await this.$axios.$post("/register", {
-          firstName: this.firstName,
-          lastName: this.lastName,
-          email: this.emailLogin,
-          password: this.passwordLogin,
+          "firstName": this.firstName,
+          "lastName": this.lastName,
+          "email": this.emailLogin,
+          "password": this.passwordLogin,
         });
 
         if (response.statusCode == 200) {

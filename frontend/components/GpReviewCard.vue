@@ -52,10 +52,10 @@ export default {
             lastName: "Chtioui",
             email: "anass.chtioui@gmail.com",
           },
-          rating: 4.1,
-          createdAt: "2015-03-25",
+          rating: 5,
+          createdAt: "2022-03-5",
           summary:
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+            "Hollow Knight is an incredible game! The world is beautifully designed, and the music sets a perfect mood. The combat is tough but fair, and exploring Hallownest is super rewarding. The bosses are challenging, and the story unfolds in a really cool, subtle way. If you love Metroidvanias, you can't miss this one!",
         };
       },
     },
