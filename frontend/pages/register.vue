@@ -2,7 +2,7 @@
   <div class="wrapper">
     <div class="gp_form">
       <h1>Sign Up</h1>
-      <form class="form-group">
+      <form class="form-group" @submit.prevent="register">
         <input
           v-model="firstName"
           type="text"
@@ -22,7 +22,7 @@
           placeholder="Password"
           required
         />
-        <input type="submit" value="Create Account" @click="register" />
+        <input type="submit" value="Create Account"/>
         <p class="text-md">
           Already have an account?
           <a href="/login">Sign in here</a>
@@ -44,20 +44,28 @@ export default {
   methods: {
     async register() {
       try {
-        let response = await this.$axios.$post("/register", {
-          "firstName": this.firstName,
-          "lastName": this.lastName,
-          "email": this.emailLogin,
-          "password": this.passwordLogin,
+        let response = await this.$axios.post("/register", {
+          firstName: this.firstName,
+          lastName: this.lastName,
+          email: this.emailLogin,
+          password: this.passwordLogin,
+        }, {
+          headers: {
+            "Content-Type": "application/json"
+          }
         });
 
-        if (response.statusCode == 200) {
+        console.log(response);
+
+        if (response.status == 201) {
+          console.log('Registration successful:', response.data);
           this.$store.commit("setToken", response.data.jwt);
+          this.$store.commit("setUserData", response.data.user);
           this.$axios.setToken(response.data.jwt, "Bearer");
           this.$router.push("/");
         }
       } catch (err) {
-        console.log(err);
+        console.error("Error during registration:", err);
       }
     },
   },

@@ -2,7 +2,7 @@
   <div class="wrapper">
     <div class="gp_form">
       <h1>Sign In</h1>
-      <form class="form-group">
+      <form class="form-group" @submit.prevent="login">
         <input v-model="emailLogin" type="email" placeholder="Email" required />
          <p class="text-md pb-1"><a href="/reset">Forgot your password?</a></p>
         <input
@@ -11,7 +11,7 @@
           placeholder="Password"
           required
         />
-        <input type="submit" label="Login" @click="login" />
+        <input type="submit" label="Login"/>
         <p class="text-md">
           Don't have an account?
           <a href="/register">Sign up here</a>
@@ -33,12 +33,12 @@ export default {
   methods: {
     async login() {
       try {
-        let response = await this.$axios.$post("/login", {
-          "email": this.emailLogin,
-          "password": this.passwordLogin,
+        let response = await this.$axios.post("/login", {
+          email: this.emailLogin,
+          password: this.passwordLogin,
         });
 
-        if (response.statusCode == 200) {
+        if (response.status == 200) {
           this.$cookies.set(process.env.SSO_COOKIE_NAME, response.data.jwt, {
             path: '/',
             maxAge: 60 * 60 * 24 * 7

@@ -13,12 +13,16 @@ const URL = process.env.IGDB_API_URL;
 
 exports.getGames = async (req, res) => {
     try {
+        const thisYear = new Date().getFullYear();
         const response = await axios.post(
             `${URL}/games`,
-            "fields id, name, first_release_date, genres, platforms, summary, total_rating, cover; limit 10;",
+            `fields id, name, first_release_date, genres, platforms, summary, total_rating, cover, hypes; where first_release_date >= ${Math.floor(new Date(thisYear, 0, 1) / 1000)} & first_release_date < ${Math.floor(new Date(thisYear + 1, 0, 1) / 1000)};  sort first_release_date desc; sort hypes desc; limit 5;`,
             { headers }
         );
         const gamesData = response.data;
+
+        const existingGames = await Game.find({}, { _id: 0, id: 1 });
+        const existingGameIds = existingGames.map(game => game.id);
 
         const genreIds = [...new Set(gamesData.flatMap(game => game.genres || []))];
         const platformIds = [...new Set(gamesData.flatMap(game => game.platforms || []))];
@@ -28,7 +32,7 @@ exports.getGames = async (req, res) => {
         const platformNames = await fetchPlatformNames(platformIds, headers);
         const coverUrls = await fetchCovers(coverIds);
 
-        const saveGames = gamesData.map(game => {
+        const saveGames = gamesData.filter(game => !existingGameIds.includes(game.id)).map(game => {
             return {
                 id: game.id,
                 title: game.name,
@@ -40,8 +44,8 @@ exports.getGames = async (req, res) => {
                 rating: game.total_rating !== undefined ? Math.floor(game.total_rating / 20) : "-1"
             }
          });
-
-         await Game.insertMany(saveGames);
+        if (saveGames.length > 0)
+            await Game.insertMany(saveGames);
 
          res.json(saveGames);
 

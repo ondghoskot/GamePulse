@@ -40,7 +40,7 @@ export default {
     "cookie-universal-nuxt"
   ],
   // Modules (https://go.nuxtjs.dev/config-modules)
-  modules: ["@nuxtjs/axios", "@nuxtjs/auth", "@nuxtjs/dotenv"],
+  modules: ["@nuxtjs/axios", "@nuxtjs/auth", "@nuxtjs/dotenv", "cookie-universal-nuxt"],
   auth: {
     redirect: {
       login: '/login',

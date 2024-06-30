@@ -1,7 +1,7 @@
 <template>
   <div class="gp_mainslider">
     <Hooper :infiniteScroll="true">
-      <slide :key="indx" v-for="(game, indx) in games" :index="indx">
+      <slide :key="game._id" v-for="game in games" :index="game.id">
         <img
           @click="$router.push('/games/' + game?._id)"
           :src="game.img"
@@ -70,6 +70,23 @@ export default {
           },
         ];
       },
+    },
+  },
+  created () {
+    this.fetchGames();
+  },
+  methods: {
+    async fetchGames() {
+      try {
+        const response = await this.$axios.get("/games");
+        console.log(response);
+        if (response.status == 200) {
+          this.games = response.data;
+          return games;
+        }
+      } catch (error) {
+        console.error("Error fetching games:", error);
+      }
     },
   },
 };
