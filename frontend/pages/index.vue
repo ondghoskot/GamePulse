@@ -5,17 +5,17 @@
     <div class="bg-dark p-2">
       <h1>Featured games</h1>
       <div class="featured_content">
-        <!-- <gp-card
+        <gp-card
         :key="index"
         v-for="(game, index) in featuredGames"
-        click.native="$router.push('/games/' + game.id)"
+        @click.native="$router.push('/games/' + game.id)"
         :card="game"
-      ></gp-card> -->
+      ></gp-card>
+       <!-- <gp-card @click.native="$router.push('/games/' + '44')"></gp-card>
         <gp-card @click.native="$router.push('/games/' + '44')"></gp-card>
         <gp-card @click.native="$router.push('/games/' + '44')"></gp-card>
         <gp-card @click.native="$router.push('/games/' + '44')"></gp-card>
-        <gp-card @click.native="$router.push('/games/' + '44')"></gp-card>
-        <gp-card @click.native="$router.push('/games/' + '44')"></gp-card>
+        <gp-card @click.native="$router.push('/games/' + '44')"></gp-card> -->
       </div>
     </div>
 
@@ -27,7 +27,25 @@
 export default {
   auth:true,
   data() {
-    return {};
+    return {
+      featuredGames: [],
+    };
+  },
+  created () {
+    this.fetchFeaturedGames();
+  },
+  methods: {
+    async fetchFeaturedGames() {
+      try {
+        const response = await this.$axios.get("/top-rated");
+        console.log(response);
+        if (response.status == 200) {
+          this.featuredGames = response.data;
+        }
+      } catch (error) {
+        console.error("Error fetching most played:", error);
+      }
+    },
   },
 };
 </script>

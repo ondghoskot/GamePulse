@@ -32,6 +32,27 @@ export default {
     Carousel3d,
     Slide,
   },
+  data() {
+    return {
+      games: [],
+    };
+  },
+  created() {
+    this.fetchMostPlayedGames();
+  },
+  methods: {
+    async fetchMostPlayedGames() {
+      try {
+        const response = await this.$axios.get("/most-played");
+        if (response.status === 200) {
+          this.games = response.data;
+          return this.games;
+        }
+      } catch (error) {
+        console.error("Error fetching most played games:", error);
+      }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

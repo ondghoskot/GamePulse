@@ -52,7 +52,7 @@ const fetchCovers = async (coverIds) => {
 
         const coverUrl = {};
         response.data.forEach(img => {
-            coverUrl[img.id] = img.url.replace("t_thumb", "t_cover_big");
+            coverUrl[img.id] = img.url.replace("t_thumb", "t_1080p");
         });
         
         return coverUrl;
