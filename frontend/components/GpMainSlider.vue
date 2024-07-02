@@ -56,7 +56,12 @@ export default {
       },
     },
   },
-  created () {
+  data() {
+    return {
+      games: [],
+    };
+  },
+  created() {
     this.fetchGames();
   },
   methods: {
@@ -64,9 +69,8 @@ export default {
       try {
         const response = await this.$axios.get("/games");
         console.log(response);
-        if (response.status == 200) {
+        if (response.status === 200) {
           this.games = response.data;
-          return games;
         }
       } catch (error) {
         console.error("Error fetching games:", error);
@@ -75,6 +79,7 @@ export default {
   },
 };
 </script>
+
 <style lang="scss" scoped>
 .gp_mainslider {
   width: 100vw;

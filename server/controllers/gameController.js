@@ -19,7 +19,7 @@ exports.getGames = async (req, res) => {
             `fields id, name, first_release_date, genres, platforms, summary, total_rating, cover, themes.name, hypes;
              where first_release_date >= ${Math.floor(new Date(thisYear, 0, 1) / 1000)}
              & first_release_date < ${Math.floor(new Date(thisYear + 1, 0, 1) / 1000)};
-             sort first_release_date desc; sort hypes desc; limit 5;`,
+             sort first_release_date desc; sort hypes desc; limit 10;`,
             { headers }
         );
         const gamesData = response.data;
