@@ -1,6 +1,6 @@
 <template>
   <div class="gp_mainslider">
-    <Hooper :infiniteScroll="true">
+    <Hooper :infiniteScroll="true" >
       <slide :key="game._id" v-for="game in games" :index="game.id">
         <img
           @click="$router.push('/games/' + game?._id)"
@@ -23,6 +23,10 @@
               new Date(game.releaseDate).getFullYear()
             }}
           </h5>
+          <div class="genres">
+            <h4>genres:</h4><br>
+            <span v-for="(genre, index) in game.genres" :key="index" class="genre">{{ genre }}</span>
+          </div>
         </div>
       </slide>
       <hooper-navigation slot="hooper-addons"></hooper-navigation>
@@ -46,27 +50,7 @@ export default {
       default() {
         return [
           {
-            title: "Hollow Knight",
-            rating: 4.1,
-            releaseDate: "2015-03-25",
-            img: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/367520/capsule_616x353.jpg?t=1695270428",
-            summary:
-              "A 2D metroidvania with an emphasis on close combat and exploration in which the player enters the once-prosperous now-bleak insect kingdom of Hallownest, travels through its various districts, meets friendly inhabitants, fights hostile ones and uncovers the kingdom's history while improving their combat abilities and movement arsenal by fighting bosses and accessing out-of-the-way areas.",
-          },
-          {
-            title: "Terraria",
-            rating: 4.8,
-            releaseDate: "2005-10-01",
-            img: "https://assets.nintendo.com/image/upload/c_fill,w_1200/q_auto:best/f_auto/dpr_2.0/ncom/software/switch/70010000001702/dac3a26570b5ca1ddf703bf0add7cc7c527f71a2b56521baf69e20c7a573c610",
-            summary: "Dig, Fight, Explore, Build: The very world is at your fingertips as you fight for survival, fortune, and glory. Will you delve deep into cavernous expanses in search of treasure and raw materials with which to craft ever-evolving gear, machinery, and aesthetics? Perhaps you will choose instead to seek out ever-greater foes to test your mettle in combat? Maybe you will decide to construct your own city to house the host of mysterious allies you may encounter along your travels? In the World of Terraria, the choice is yours!",
-          },
-          {
-            title: "Super Meat Boy",
-            rating: 3.3,
-            releaseDate: "2022-09-11",
-            img: "https://assets.nintendo.com/image/upload/ar_16:9,b_auto:border,c_lpad/b_white/f_auto/q_auto/dpr_1.5/ncom/software/switch/70010000001990/cd98a2abfb3daabf755ee6230142a01cf1b2f717d8831093545595280539f1eb",
-            summary:
-              "Super Meat Boy is a tough-as-nails platformer where you play as an animated cube of meat who's trying to save his girlfriend (who happens to be made of bandages) from an evil fetus in a jar wearing a tux",
+            img: "https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExenBmbTRldjdtMTNxaGFvajUxcWtwanRvb2F2MWI0eXVma2g2YmRwbCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/MydKZ8HdiPWALc0Lqf/giphy.gif",
           },
         ];
       },
@@ -94,46 +78,81 @@ export default {
 <style lang="scss" scoped>
 .gp_mainslider {
   width: 100vw;
-  height: 60rem;
-  // position: absolute;
-  top: 0;
+  height: 100vh; 
   padding: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #101010;
+
   &__info {
-    background: #151515;
+    background: rgba(0, 0, 0, 0.8); 
     color: #fff;
     padding: 2rem;
-    width: 100%;
-    height: auto;
+    width: 50%;
     max-height: fit-content;
     text-align: left;
+    border-radius: 10px; 
+    
+
     h1 {
-      margin-top: 2rem;
+      margin-top: 0;
+      font-size: 2.5rem; 
+      line-height: 1.2;
     }
+
     p {
-      margin-top: 3rem;
-      color: #999;
+      margin-top: 1rem;
+      color: #ccc;
+      font-size: 1rem;
+      line-height: 1.5;
+      text-align: center;
     }
+
     h5 {
-      position: absolute;
-      bottom: 3rem;
-      color: #666;
-      width: 100%;
+      margin-top: 1rem;
+      color: #999;
+      font-size: 1rem;
+      opacity: 0.6;
+      text-align: right;
+    }
+
+    .genres {
+      margin-top: 1rem;
+      
+      h4 {
+        font-size: 1.2rem;
+        color: #ddd;
+        text-decoration: underline;
+        
+      }
+
+   
     }
   }
 }
+
 .hooper {
-  height: 60vh;
+  height: 100vh;
 }
+
 img {
-  width: 100%;
+  width: 50%;
   height: auto;
   object-fit: cover;
   cursor: pointer;
+  border-radius: 10px; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); 
 }
+
 .hooper-slide {
   display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 .hooper-navigation {
   fill: #fff;
+  margin: 0 1rem;
 }
 </style>

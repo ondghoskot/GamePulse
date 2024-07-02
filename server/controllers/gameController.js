@@ -16,7 +16,10 @@ exports.getGames = async (req, res) => {
         const thisYear = new Date().getFullYear();
         const response = await axios.post(
             `${URL}/games`,
-            `fields id, name, first_release_date, genres, platforms, summary, total_rating, cover, hypes; where first_release_date >= ${Math.floor(new Date(thisYear, 0, 1) / 1000)} & first_release_date < ${Math.floor(new Date(thisYear + 1, 0, 1) / 1000)};  sort first_release_date desc; sort hypes desc; limit 5;`,
+            `fields id, name, first_release_date, genres, platforms, summary, total_rating, cover, themes.name, hypes;
+             where first_release_date >= ${Math.floor(new Date(thisYear, 0, 1) / 1000)}
+             & first_release_date < ${Math.floor(new Date(thisYear + 1, 0, 1) / 1000)};
+             sort first_release_date desc; sort hypes desc; limit 5;`,
             { headers }
         );
         const gamesData = response.data;
@@ -58,7 +61,7 @@ exports.getMostPlayed = async (req, res) => {
     try {
         const response = await axios.post(
             `${URL}/games`,
-            "fields name, first_release_date, genres, platforms, summary, cover, total_rating, total_rating_count; sort total_rating_count desc; limit 10;",
+            "fields name, id, first_release_date, genres, platforms, summary, cover, total_rating, total_rating_count; sort total_rating_count desc; limit 10;",
             { headers }
         );
         const gamesData = response.data;
@@ -97,7 +100,7 @@ exports.getTopRated = async (req, res) => {
     try {
         const response = await axios.post(
             `${URL}/games`,
-            "fields name, first_release_date, genres, platforms, summary, total_rating, cover; limit 5; sort total_rating desc;",
+            "fields name, id, first_release_date, genres, platforms, summary, total_rating, cover; limit 5; sort total_rating desc;",
             { headers }
         );
         const gamesData = response.data;
