@@ -35,7 +35,9 @@
 
     <div class="review_section pt-1">
       <div class="left-section">
-        <!--<div class="pb-1" v-for="i in 10"><gp-review-card></gp-review-card></div>-->
+        <div class="pb-1" v-if="reviews && reviews.length > 0">
+          <gp-review-card v-for="review in reviews" :key="review._id" :review="review"></gp-review-card>
+        </div>
          <div class="no_records p-2 text-center">
 
           No reviews found.
@@ -68,17 +70,37 @@ export default {
         img: "https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExenBmbTRldjdtMTNxaGFvajUxcWtwanRvb2F2MWI0eXVma2g2YmRwbCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/MydKZ8HdiPWALc0Lqf/giphy.gif",
 
       },
+      reviews: [],
     };
   },
   created() {
     const gameId = this.$route.params.id;
     if (gameId) {
       this.fetchGameDetails(gameId);
+      this.fetchReviewsByGame(gameId);
     }
   },
   methods: {
-    submitReview(event){
+    async submitReview(event){
       if(this.summaryData != "" && this.titleData != ''){
+        try {
+          const response = await this.$axios.post('/reviews', {
+            gameId: this.game.id,
+            rating: this.ratingData,
+            title: this.titleData,
+            review: this.summaryData
+          });
+          if (response.status === 201) {
+            const newReview = response.data;
+            this.reviews.unshift(newReview); // Add new review to the beginning of the reviews array
+            this.showReviewForm = false; // Hide the review form after submission
+            this.ratingData = 0; // Reset rating data
+            this.titleData = ""; // Clear title data
+            this.summaryData = ""; // Clear summary data
+          }
+        } catch (error) {
+          console.error('Error submitting review:', error);
+        }
 
       }
     },
@@ -98,7 +120,17 @@ export default {
       } catch (error) {
         console.error('Error fetching game details:', error);
       }
-     }
+     },
+     async fetchReviewsByGame(gameId) {
+      try {
+        const response = await this.$axios.get(`/reviews/game/${gameId}`);
+        if (response.status === 200) {
+          this.reviews = response.data;
+        }
+      } catch (error) {
+        console.error('Error fetching reviews:', error);
+      }
+    },
   },
 };
 </script>
