@@ -10,39 +10,10 @@
       ></gp-card>
     </div>
     <h1 class="p-2">Screenshots</h1>
-    <carousel-3d>
-      <slide :index="0">
-        <img
-          src="https://ip.trueachievements.com/remote/www.trueachievements.com/customimages/085538.jpg?width=900"
-          alt=""
-      /></slide>
-      <slide :index="1">
-        <img
-          src="https://i.pinimg.com/originals/e4/6c/d9/e46cd932609864801ce2ae8312faf855.jpg"
-      /></slide>
-      <slide :index="2">
-        <img src="https://i.imgur.com/zzX0Cqd.jpg" alt=""
-      /></slide>
-      <slide :index="3">
-        <img
-          src="https://ip.truetrophies.com/remote/www.truetrophies.com/customimages/052987.jpg?width=900"
-          alt=""
-      /></slide>
-      <slide :index="4"
-        ><img
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvz3aoA_5ksboB_ZzP8Q2YLQOQPaRiZKEt8s8oSj2t2Xj_Th8xiiQNVt7qekP98anvm-o&usqp=CAU"
-          alt=""
-      /></slide>
-      <slide :index="5"
-        ><img
-          src="https://www.cubed3.com/media/2017/February/hollowkn5.jpg"
-          alt=""
-      /></slide>
-      <slide :index="6"
-        ><img
-          src="https://ip.truesteamachievements.com/remote/cdn.akamai.steamstatic.com/steam/apps/367520/ss_38ed9ff5af78d3ba9a5a2f2beb11879c83e69444.1920x1080.jpg%3Ft=1487959245?width=900"
-          alt=""
-      /></slide>
+    <carousel-3d v-if="game.screenshots && game.screenshots.length > 0">
+      <slide v-for="(screenshot, index) in game.screenshots" :key="index" :index="index">
+        <img :src="screenshot" alt="Screenshot" />
+      </slide>
     </carousel-3d>
     <h1 class="p-2">Reviews</h1>
     <div class="add_button" v-show="!showReviewForm" @click="()=>{showReviewForm = true}">Add Review</div>
@@ -64,11 +35,11 @@
 
     <div class="review_section pt-1">
       <div class="left-section">
-        <div class="pb-1" v-for="i in 10"><gp-review-card></gp-review-card></div>
-        <!-- <div class="no_records p-2 text-center">
+        <!--<div class="pb-1" v-for="i in 10"><gp-review-card></gp-review-card></div>-->
+         <div class="no_records p-2 text-center">
 
           No reviews found.
-        </div> -->
+        </div>
       </div>
       <div class="right-section">
       </div>
@@ -94,15 +65,16 @@ export default {
       showReviewForm: false,
       ratingData: 0,
       game: {
-        title: "Hollow Knight",
-        rating: 4.8,
-        releaseDate: "2015-03-2",
-        platforms: "Nintendo Switch, Playstation 4, PC, Xbox",
-        img: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/367520/capsule_616x353.jpg?t=1695270428",
-        summary:
-          "Brave the Depths of a Forgotten Kingdom\nBeneath the fading town of Dirtmouth sleeps a vast, ancient kingdom. Many are drawn beneath the surface, searching for riches, or glory, or answers to old secrets.\n\nAs the enigmatic Knight, you’ll traverse the depths, unravel its mysteries and conquer its evils",
+        img: "https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExenBmbTRldjdtMTNxaGFvajUxcWtwanRvb2F2MWI0eXVma2g2YmRwbCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/MydKZ8HdiPWALc0Lqf/giphy.gif",
+
       },
     };
+  },
+  created() {
+    const gameId = this.$route.params.id;
+    if (gameId) {
+      this.fetchGameDetails(gameId);
+    }
   },
   methods: {
     submitReview(event){
@@ -115,19 +87,18 @@ export default {
       this.ratingData = 0;
       this.titleData = "";
       this.summaryData = "";
-    }
-  },
-  async asyncData({ params, $axios}) {
-    // if (params.id) {
-    //   try {
-    //     let details = await $axios.$get("/games/" + id);
-    //     if (details) {
-    //      return { game: details};
-    //     }
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
-    // }
+    },
+    async fetchGameDetails(id) {
+       try {
+        const response = await this.$axios.get(`/games/${id}`);
+        if (response.status === 200) {
+          this.game = response.data;
+          console.log(this.game);
+        }
+      } catch (error) {
+        console.error('Error fetching game details:', error);
+      }
+     }
   },
 };
 </script>

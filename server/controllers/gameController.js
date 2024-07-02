@@ -61,7 +61,7 @@ exports.getMostPlayed = async (req, res) => {
     try {
         const response = await axios.post(
             `${URL}/games`,
-            "fields name, id, first_release_date, genres, platforms, summary, cover, total_rating, total_rating_count; sort total_rating_count desc; limit 10;",
+            "fields id, name, first_release_date, genres, platforms, summary, cover, total_rating, total_rating_count; sort total_rating_count desc; limit 10;",
             { headers }
         );
         const gamesData = response.data;
@@ -76,6 +76,7 @@ exports.getMostPlayed = async (req, res) => {
 
         const saveGames = gamesData.map(game => {
             return {
+                id: game.id,
                 title: game.name,
                 img: coverUrls[game.cover] || "No cover available",
                 releaseDate: game.first_release_date ? new Date(game.first_release_date * 1000) : null,
@@ -115,6 +116,7 @@ exports.getTopRated = async (req, res) => {
 
         const saveGames = gamesData.map(game => {
             return {
+                id: game.id,
                 title: game.name,
                 img: coverUrls[game.cover] || "No cover available",
                 releaseDate: game.first_release_date ? new Date(game.first_release_date * 1000) : null,

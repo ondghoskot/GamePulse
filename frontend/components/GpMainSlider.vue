@@ -1,9 +1,9 @@
 <template>
   <div class="gp_mainslider">
     <Hooper :infiniteScroll="true" >
-      <slide :key="game._id" v-for="game in games" :index="game.id">
+      <slide :key="game.id" v-for="game in games" :index="game.id">
         <img
-          @click="$router.push('/games/' + game?._id)"
+          @click="$router.push('/games/' + game?.id)"
           :src="game.img"
           alt=""
         />

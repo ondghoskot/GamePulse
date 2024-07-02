@@ -74,6 +74,7 @@ export default {
   align-items: center;
   width: 4rem;
   background: #fff;
+  opacity: 0.8;
   svg {
     width: 1.5rem;
     path {

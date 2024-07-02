@@ -4,6 +4,7 @@ const fs = require("fs");
 const https = require("https");
 const userRoutes = require("../routes/users");
 const gameRoutes = require("../routes/games");
+const reviewRoutes = require("../routes/reviews");
 const connectDb = require("./db");
 const cors = require('cors');
 require('dotenv').config();
@@ -28,6 +29,7 @@ const server = https.createServer(httpsOptions, app);
 // testing
 app.use("/", gameRoutes);
 app.use("/", userRoutes);
+app.use("/", reviewRoutes);
 app.get("/", (req, res) => {
     res.send("hello world")
 });
