@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const connectionURL = "mongodb://localhost:27017/GamePulsedb";
+const connectionURL = process.env.MONGODB_CONNECTION_STRING;
 
 // Connect to database
 const connectDb = mongoose.connect(connectionURL)
