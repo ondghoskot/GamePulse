@@ -27,20 +27,19 @@ export default {
     { src: "~/plugins/carousel", mode: "client" },
   ],
   axios: {
-    baseURL: "https://localhost:3001",
+    baseURL: process.env.API_URL,
   },
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
 
   // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
   buildModules: [
-   
     "@nuxtjs/dotenv",
     "@nuxtjs/style-resources",
     "cookie-universal-nuxt"
   ],
   // Modules (https://go.nuxtjs.dev/config-modules)
-  modules: ["@nuxtjs/axios", "@nuxtjs/auth", "@nuxtjs/dotenv", "cookie-universal-nuxt"],
+  modules: ["@nuxtjs/axios", "@nuxtjs/auth"],
   auth: {
     redirect: {
       login: '/login',

@@ -11,8 +11,8 @@ require('dotenv').config();
 
 
 const httpsOptions = {
-    key: fs.readFileSync("./server/certs/localhost.decrypted.key"),
-    cert: fs.readFileSync("./server/certs/localhost.crt")
+    key: fs.readFileSync("./certs/localhost.decrypted.key"),
+    cert: fs.readFileSync("./certs/localhost.crt")
 };
 
 // start instance
