@@ -2,10 +2,9 @@
 const express = require("express");
 const fs = require("fs");
 const https = require("https");
-const userRoutes = require("../routes/users");
-const gameRoutes = require("../routes/games");
-const reviewRoutes = require("../routes/reviews");
-const connectDb = require("./db");
+const userRoutes = require("./routes/users");
+const gameRoutes = require("./routes/games");
+const reviewRoutes = require("./routes/reviews");
 const cors = require('cors');
 require('dotenv').config();
 
