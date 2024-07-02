@@ -1,0 +1,15 @@
+[{
+  "_id": {
+    "$oid": "66843aa718f382b267f53aca"
+  },
+  "game": {
+    "$oid": "000003fc18f382b267f53ac9"
+  },
+  "rating": 5,
+  "title": "thistitleData",
+  "review": "thissummaryData",
+  "createdAt": {
+    "$date": "2024-07-02T17:36:39.056Z"
+  },
+  "__v": 0
+}]
