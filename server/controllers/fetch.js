@@ -75,7 +75,7 @@ const fetchCover = async (coverId) => {
         }
 
         const coverUrl = {};
-        coverUrl[coverId] = response.data[0].url;
+        coverUrl[coverId] = response.data[0].url.replace("t_thumb", "t_1080p");
         return coverUrl;
     } catch (error) {
         console.error("Error fetching covers:", error.message);
@@ -90,7 +90,7 @@ const fetchSs = async (ssIds) => {
             `fields url; where id = (${ssIds.join(",")});`,
             { headers }
         );
-        return response.data.map(screenshot => screenshot.url);
+        return response.data.map(screenshot => screenshot.url.replace("t_thumb", "t_1080p"));
     } catch (error) {
         console.error("Error fetching screenshots:", error.message);
         return {};
