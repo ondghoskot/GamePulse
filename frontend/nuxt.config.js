@@ -27,7 +27,7 @@ export default {
     { src: "~/plugins/carousel", mode: "client" },
   ],
   axios: {
-    baseURL: process.env.API_URL || "https://game-pulse-nine.vercel.app",
+    baseURL: "https://game-pulse-nine.vercel.app",
   },
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
