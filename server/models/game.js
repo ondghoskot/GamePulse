@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const gameSchema = mongoose.Schema({
-    id: Number,
+    //id: Number,
     title: String,
     img: String,
     releaseDate: Date,
