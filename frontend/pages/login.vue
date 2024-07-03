@@ -38,7 +38,8 @@ export default {
           password: this.passwordLogin,
         });
 
-        if (response.status == 200) {
+        //this needs to be sent from your API to work
+        // if (response.status == 200) {
           this.$cookies.set(process.env.SSO_COOKIE_NAME, response.data.jwt, {
             path: '/',
             maxAge: 60 * 60 * 24 * 7
@@ -46,7 +47,7 @@ export default {
           this.$store.commit("setToken", response.data.jwt);
           this.$axios.setToken(response.data.jwt, "Bearer");
           this.$router.push("/");
-        }
+        // }
       } catch (err) {
         console.log(err);
       }
