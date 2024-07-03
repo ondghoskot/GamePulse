@@ -34,13 +34,13 @@
 
     <div class="review_section pt-1">
       <div class="left-section">
-        <div class="pb-1" v-for="i in 10">
+        <!-- <div class="pb-1" v-for="i in 10">
           <gp-review-card showEditActions></gp-review-card>
-        </div>
-        <!-- <div class="no_records p-2 text-center">
+        </div> -->
+         <div class="no_records p-2 text-center">
 
           No reviews found.
-        </div> -->
+        </div>
       </div>
       <div class="right-section">
       </div>
