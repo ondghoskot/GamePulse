@@ -92,11 +92,11 @@ export default {
           });
           if (response.status === 201) {
             const newReview = response.data;
-            this.reviews.unshift(newReview); // Add new review to the beginning of the reviews array
-            this.showReviewForm = false; // Hide the review form after submission
-            this.ratingData = 0; // Reset rating data
-            this.titleData = ""; // Clear title data
-            this.summaryData = ""; // Clear summary data
+            this.reviews.unshift(newReview);
+            this.showReviewForm = false; 
+            this.ratingData = 0;
+            this.titleData = ""; 
+            this.summaryData = "";
           }
         } catch (error) {
           console.error('Error submitting review:', error);
