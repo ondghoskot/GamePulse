@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 
 const reviewSchema = mongoose.Schema({
-    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", /*required: true*/ },
-    game: { type: mongoose.Schema.Types.ObjectId, ref: "Game", required: true },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    game: { type: Number, required: true },
     rating: { type: Number, required: true, min: 1, max: 5 },
     title: { type: String, required: true },
     review: { type: String, required: true },

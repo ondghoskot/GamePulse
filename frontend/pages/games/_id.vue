@@ -89,6 +89,10 @@ export default {
             rating: this.ratingData,
             title: this.titleData,
             review: this.summaryData
+          }, {
+            headers: {
+          Authorization: `Bearer ${this.$store.state.token}`
+        }
           });
           if (response.status === 201) {
             const newReview = response.data;
