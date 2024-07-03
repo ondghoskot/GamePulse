@@ -40,7 +40,7 @@ export default {
 
         //this needs to be sent from your API to work
         // if (response.status == 200) {
-          this.$cookies.set(process.env.SSO_COOKIE_NAME, response.data.jwt, {
+          this.$cookies.set('gp_ssojwt', response.data.jwt, {
             path: '/',
             maxAge: 60 * 60 * 24 * 7
           });
