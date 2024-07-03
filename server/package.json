@@ -7,7 +7,8 @@
   "scripts": {
     "build": "webpack",
     "watch": "webpack --watch",
-    "start": "nodemon ./app.js"
+    "start": "nodemon ./app.js",
+    "vercel-build": "echo 'Nothing'"
   },
   "author": "Anass Chtioui",
   "license": "ISC",
