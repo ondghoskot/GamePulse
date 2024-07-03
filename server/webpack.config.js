@@ -34,7 +34,7 @@ module.exports = {
     plugins: [
         new CopyPlugin({
           patterns: [
-            { from: "certs/*", to: "./" },
+            { from: "./certs/*", to: "./" },
           ],
         }),
       ],
