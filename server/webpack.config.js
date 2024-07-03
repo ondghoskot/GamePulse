@@ -1,5 +1,7 @@
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
+const CopyPlugin = require("copy-webpack-plugin");
+
 
 module.exports = {
     mode: 'production',
@@ -28,5 +30,12 @@ module.exports = {
     },
     resolve:{
         extensions: ['','.jsx','.js']
-    }
+    },
+    plugins: [
+        new CopyPlugin({
+          patterns: [
+            { from: "certs/*", to: "./" },
+          ],
+        }),
+      ],
 };
