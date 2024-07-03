@@ -1,13 +1,13 @@
 export default async function ({ $axios, store, env, redirect, app, $auth, route }) {
    if (['login', 'register'].includes(route.name)) return
-  let $cookie = env.SSO_COOKIE_NAME;
+  let $cookie = 'gp_ssojwt';
   if (app.$cookies.get($cookie)) {
 
      store.commit("setToken", app.$cookies.get($cookie));
      $auth.setToken(app.$cookies.get($cookie));
      let axiosInstance = $axios.create();
      $auth.setUser(
-         JSON.parse(atob(app.$cookies.get(env.SSO_COOKIE_NAME).split(".")[1]))
+         JSON.parse(atob(app.$cookies.get($cookie).split(".")[1]))
      );
      axiosInstance.setToken(app.$cookies.get($cookie), "Bearer");
 
