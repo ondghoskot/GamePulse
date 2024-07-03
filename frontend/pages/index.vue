@@ -25,7 +25,7 @@
 
 <script>
 export default {
-  auth:true,
+  auth:false,
   data() {
     return {
       featuredGames: [],

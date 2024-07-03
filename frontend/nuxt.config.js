@@ -40,21 +40,21 @@ export default {
   ],
   // Modules (https://go.nuxtjs.dev/config-modules)
   modules: ["@nuxtjs/axios", "@nuxtjs/auth"],
-  auth: {
-    redirect: {
-      login: '/login',
-      callback: false,
-      home: false,
-    },
-    strategies: {
-      local: {
-        autoFetchUser: false,
-        tokenName: "Authorization",
-        required: true,
-        tokenType: "Bearer",
-      },
-    },
-  },
+  // auth: {
+  //   redirect: {
+  //     login: '/login',
+  //     callback: false,
+  //     home: false,
+  //   },
+  //   strategies: {
+  //     local: {
+  //       autoFetchUser: false,
+  //       tokenName: "Authorization",
+  //       required: true,
+  //       tokenType: "Bearer",
+  //     },
+  //   },
+  // },
 
   build: {},
 };
