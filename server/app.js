@@ -5,6 +5,7 @@ const https = require("https");
 const userRoutes = require("./routes/users");
 const gameRoutes = require("./routes/games");
 const reviewRoutes = require("./routes/reviews");
+const connectDb = require("./config/db");
 const cors = require('cors');
 require('dotenv').config();
 
@@ -20,7 +21,8 @@ app.use(express.json());
 app.use(cors({
     origin: "*"
   }));
-
+  
+connectDb();
 // create server
 const server = https.createServer(httpsOptions, app);
 
