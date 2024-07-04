@@ -11,7 +11,7 @@ exports.createReview = async (req, res) => {
         await newReview.save();
 
         // Update the game and user to reference the new review
-        await Game.findByIdAndUpdate({ id: gameId }, { $push: { reviews: newReview._id } });
+        await Game.findByIdAndUpdate( gameId, { $push: { reviews: newReview._id } });
         await User.findByIdAndUpdate(userId, { $push: { reviews: newReview._id } });
 
         res.status(201).send(newReview);
