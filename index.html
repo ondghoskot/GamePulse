@@ -1,10 +1,83 @@
-<!--<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GamePulse</title>
-    <link rel="stylesheet" href="stylesheet.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #1c1c1c; /* Dark background color */
+            color: white;
+        }
+        header {
+            background-color: #4a148c; /* Purple color */
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+        header nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        header a {
+            color: white;
+            text-decoration: none;
+            padding: 5px 10px;
+        }
+        section {
+            padding: 50px 20px;
+            text-align: center;
+        }
+        .intro {
+            background-image: url('frontend/assets/logo.png');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 20px;
+        }
+        .intro h1 {
+            font-size: 3em;
+            color: #1bfd1b70;
+        }
+        .intro p {
+            font-size: 1.5em;
+        }
+        .btn {
+            background-color: #00ff007e;
+            color: black;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+            text-decoration: none;
+        }
+        .feature, .about, .video {
+            margin: 20px 0;
+        }
+        .feature img, .about img, .video img {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+        }
+        .feature div, .about div, .video div {
+            display: inline-block;
+            margin: 20px;
+        }
+        .about a {
+            display: block;
+            margin: 10px 0;
+            color: #00ff007e; /* Green color */
+            text-decoration: none;
+        }
+        .about a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -59,43 +132,6 @@
             <source src="video.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
-    </section>
-</body>
-</html>
--->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GamePulse Landing Page</title>
-    <link rel="stylesheet" href="stylesheet.css">
-</head>
-<body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="#intro">Home</a></li>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#about">About</a></li>
-            </ul>
-        </nav>
-    </header>
-    <section id="intro">
-        <div class="cover">
-            <img src="assets/images/cover.jpg" alt="Cover Image">
-            <div class="overlay">
-                <h1>GamePulse</h1>
-                <p>Your ultimate video game hub</p>
-                <a href="https://yourusername.github.io/gamepulse" class="btn">Go to App</a>
-            </div>
-        </div>
-    </section>
-    <section id="features">
-        <!-- Feature content here -->
-    </section>
-    <section id="about">
-        <!-- About content here -->
     </section>
 </body>
 </html>
