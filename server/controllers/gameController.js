@@ -101,7 +101,7 @@ exports.getTopRated = async (req, res) => {
     try {
         const response = await axios.post(
             `${URL}/games`,
-            "fields name, id, first_release_date, genres, platforms, summary, total_rating, cover; limit 5; sort total_rating desc;",
+            "fields name, id, first_release_date, genres, platforms, summary, total_rating, cover; limit 15; sort total_rating desc;",
             { headers }
         );
         const gamesData = response.data;
