@@ -1,11 +1,18 @@
 # Portfolio Project
 ## GamePulse
 
+![Game_covers](assets/cover.png)
+
+
 GamePulse is a platform where users can check the latest news and trends about video games and create accounts to review games they've played.
 
 ### Introduction
 
-Welcome to GamePulse, your one-stop destination for everything about video games. Stay updated with the latest news, discover new games, and join a vibrant community of gamers who share their experiences and insights.
+#### Inspiration
+As a gamer, I noticed a gap in the market for a comprehensive platform that not only provides the latest games and trends but also fosters a community where gamers can share their experiences and insights. My vision for GamePulse is to create a one-stop destination for everything related to video games, driven by a passionate community.
+
+#### The Journey
+Building GamePulse was a journey filled with both technical challenges and rewarding milestones. My primary goal was to create a user-friendly platform that presents game data in an engaging and insightful manner. Along the way, I faced several challenges, from managing large datasets efficiently to ensuring a seamless user experience.
 
 [Visit GamePulse](game-pulse-ui.vercel.app)
 
@@ -75,3 +82,18 @@ Not available yet!
 
 ### Licensing
 This project is licensed under the MIT License.
+
+### Screenshots
+![Game_covers](assets/register.jpg)
+
+![Game_covers](assets/coverImg.jpg)
+
+![Game_covers](assets/review.png)
+
+### Next Steps
+In addition to working on the current features to ensure a smooth user experience, I have a few other features in mind that could be a game changer, such as, personalized game lists for each user as well as more user interactions options like likes and comments on eachother's reviews.
+
+### Reflections
+Building GamePulse has been an incredible learning experience. I faced a lot of challenges, from handling large datasets to ensuring a responsive user interface, and each obstacle taught us valuable lessons. Moving forward, I am excited to continue improving GamePulse and adding new features that will enhance the user experience.
+
+Thank you for visiting GamePulse. I hope you enjoy using this platform as much as I enjoyed building it.
