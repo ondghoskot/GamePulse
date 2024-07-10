@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+//user object structure
 const userSchema = mongoose.Schema({
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },

@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+//review object feature
 const reviewSchema = mongoose.Schema({
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User"},
     game: { type: Number, required: true },

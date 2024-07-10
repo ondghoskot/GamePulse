@@ -2,6 +2,7 @@ const Review = require('../models/review');
 const Game = require('../models/game');
 const User = require('../models/user');
 
+//method to create a review on the game page
 exports.createReview = async (req, res) => {
     try {
         const { gameId, rating, title, review } = req.body;
@@ -20,6 +21,7 @@ exports.createReview = async (req, res) => {
     }
 };
 
+//method to display reviews on the game page
 exports.getReviewsByGame = async (req, res) => {
     try {
         const { gameId } = req.params;
@@ -30,6 +32,7 @@ exports.getReviewsByGame = async (req, res) => {
     }
 };
 
+//method to display each user's reviews
 exports.getReviewsByUser = async (req, res) => {
     try {
         const { userId } = req.params;

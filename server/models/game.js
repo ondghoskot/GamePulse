@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+//Game object structure
 const gameSchema = mongoose.Schema({
     title: String,
     img: String,
@@ -14,6 +15,7 @@ const gameSchema = mongoose.Schema({
     id: Number
 });
 
+//indexing for search feature
 gameSchema.index({
     title: 'text',
     genre: 'text',

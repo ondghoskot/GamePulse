@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require('dotenv').config();
 
+//method for signing up auth
 exports.register = async (req, res) => {
     try {
         const { firstName, lastName, email, password } = req.body;
@@ -34,6 +35,7 @@ exports.register = async (req, res) => {
     }
 };
 
+//method for logging in auth
 exports.login = async (req, res) => {
     try{
         const { email, password } = req.body;
@@ -66,6 +68,7 @@ exports.login = async (req, res) => {
     }
 };
 
+//method to get user info
 exports.getProfile = async (req, res) => {
     try {
         const userId = req.user.userId;

@@ -1,6 +1,7 @@
 const Token = require("../models/token");
 const jwt = require("jsonwebtoken");
 
+//method to check token availability and validity for auth
 const authMiddleware = async (req, res, next) => {
     try {
         const token = req.header("Authorization").replace("Bearer ", "");

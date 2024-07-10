@@ -38,7 +38,7 @@ export default {
           password: this.passwordLogin,
         });
 
-        //this needs to be sent from your API to work
+        //this needs to be sent from my API to work
         // if (response.status == 200) {
           this.$cookies.set('gp_ssojwt', response.data.jwt, {
             path: '/',
