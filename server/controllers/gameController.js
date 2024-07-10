@@ -8,14 +8,16 @@ const headers = {
     "Client-ID": process.env.CLIENT_ID,
     "Authorization": `Bearer ${process.env.AUTHORIZATION}`
 };
-
 const URL = process.env.IGDB_API_URL;
 
+// Method to return the newest games from IGDB to display in the main slider of the app
 exports.getGames = async (req, res) => {
     try {
         const thisYear = new Date().getFullYear();
         const response = await axios.post(
+            //IGDB endpoint
             `${URL}/games`,
+            //IGDB query
             `fields id, name, first_release_date, genres, platforms, summary, total_rating, cover, themes.name, hypes;
              where first_release_date >= ${Math.floor(new Date(thisYear, 0, 1) / 1000)}
              & first_release_date < ${Math.floor(new Date(thisYear + 1, 0, 1) / 1000)};
@@ -24,9 +26,14 @@ exports.getGames = async (req, res) => {
         );
         const gamesData = response.data;
 
-        const existingGames = await Game.find({}, { _id: 0, id: 1 });
-        const existingGameIds = existingGames.map(game => game.id);
+        // Extract IDs for existing checks and fetch names
+        const gameIds = gamesData.map(game => game.id);
+        const existingGames = await Game.find({ id: { $in: gameIds } });
 
+        // Convert existing game IDs to a Set for quick lookup
+        const existingGameIds = new Set(existingGames.map(game => game.id));
+        
+        //turn Ids into names
         const genreIds = [...new Set(gamesData.flatMap(game => game.genres || []))];
         const platformIds = [...new Set(gamesData.flatMap(game => game.platforms || []))];
         const coverIds = [...new Set(gamesData.map(game => game.cover).filter(Boolean))];
@@ -35,7 +42,10 @@ exports.getGames = async (req, res) => {
         const platformNames = await fetchPlatformNames(platformIds, headers);
         const coverUrls = await fetchCovers(coverIds);
 
-        const saveGames = gamesData.filter(game => !existingGameIds.includes(game.id)).map(game => {
+        //structure the returned game object
+        const newGames = gamesData
+        .filter(game => !existingGameIds.has(game.id))
+        .map(game => {
             return {
                 id: game.id,
                 title: game.name,
@@ -47,16 +57,21 @@ exports.getGames = async (req, res) => {
                 rating: game.total_rating !== undefined ? Math.floor(game.total_rating / 20) : "-1"
             }
          });
-        if (saveGames.length > 0)
-            await Game.insertMany(saveGames);
 
-         res.json(saveGames);
+        //save games in database
+        if (newGames.length > 0) {
+            await Game.insertMany(newGames);
+        }
+
+        //return saved games upon request
+         res.json(newGames);
 
     } catch (error) {
         res.status(500).send({error: error.message});
     }
 };
 
+//Method to return most played games by manipulating IGDB query
 exports.getMostPlayed = async (req, res) => {
     try {
         const response = await axios.post(
@@ -66,6 +81,13 @@ exports.getMostPlayed = async (req, res) => {
         );
         const gamesData = response.data;
 
+        // Extract IDs for existing checks and fetch names
+        const gameIds = gamesData.map(game => game.id);
+        const existingGames = await Game.find({ id: { $in: gameIds } });
+
+        // Convert existing game IDs to a Set for quick lookup
+        const existingGameIds = new Set(existingGames.map(game => game.id));
+
         const genreIds = [...new Set(gamesData.flatMap(game => game.genres || []))];
         const platformIds = [...new Set(gamesData.flatMap(game => game.platforms || []))];
         const coverIds = [...new Set(gamesData.map(game => game.cover).filter(Boolean))];
@@ -74,7 +96,9 @@ exports.getMostPlayed = async (req, res) => {
         const platformNames = await fetchPlatformNames(platformIds, headers);
         const coverUrls = await fetchCovers(coverIds);
 
-        const saveGames = gamesData.map(game => {
+        const newGames = gamesData
+        .filter(game => !existingGameIds.has(game.id))
+        .map(game => {
             return {
                 id: game.id,
                 title: game.name,
@@ -88,15 +112,19 @@ exports.getMostPlayed = async (req, res) => {
             }
          });
 
-         await Game.insertMany(saveGames);
+        //save games in database
+        if (newGames.length > 0) {
+            await Game.insertMany(newGames);
+        }
 
-         res.json(saveGames);
+         res.json(newGames);
 
     } catch (error) {
         res.status(500).send({error: error.message});
     }
 };
 
+//Method to get the top rated games in the IGDB
 exports.getTopRated = async (req, res) => {
     try {
         const response = await axios.post(
@@ -106,6 +134,13 @@ exports.getTopRated = async (req, res) => {
         );
         const gamesData = response.data;
 
+        // Extract IDs for existing checks and fetch names
+        const gameIds = gamesData.map(game => game.id);
+        const existingGames = await Game.find({ id: { $in: gameIds } });
+
+        // Convert existing game IDs to a Set for quick lookup
+        const existingGameIds = new Set(existingGames.map(game => game.id));
+
         const genreIds = [...new Set(gamesData.flatMap(game => game.genres || []))];
         const platformIds = [...new Set(gamesData.flatMap(game => game.platforms || []))];
         const coverIds = [...new Set(gamesData.map(game => game.cover).filter(Boolean))];
@@ -114,7 +149,9 @@ exports.getTopRated = async (req, res) => {
         const platformNames = await fetchPlatformNames(platformIds, headers);
         const coverUrls = await fetchCovers(coverIds);
 
-        const saveGames = gamesData.map(game => {
+        const newGames = gamesData
+        .filter(game => !existingGameIds.has(game.id))
+        .map(game => {
             return {
                 id: game.id,
                 title: game.name,
@@ -127,17 +164,29 @@ exports.getTopRated = async (req, res) => {
             }
          });
 
-         await Game.insertMany(saveGames);
+         //save games in database
+        if (newGames.length > 0) {
+            await Game.insertMany(newGames);
+        }
 
-         res.json(saveGames);
+         res.json(newGames);
 
     } catch (error) {
         res.status(500).send({error: error.message});
     }
 };
 
+//Method for another page (games/:id) to get game details upon clicking on a game
 exports.getGameDetails = async (req, res) => {
     try {
+        const gameId = req.params.id;
+        const existingGame = await Game.findOne({ id: gameId });
+
+        // If game exists in the database, return it
+        if (existingGame) {
+            return res.json(existingGame);
+        }
+
         const response = await axios.post(
             `${URL}/games`,
             `fields name, first_release_date, genres, platforms, summary, storyline, total_rating, cover, screenshots; where id = ${req.params.id};`,
@@ -166,14 +215,15 @@ exports.getGameDetails = async (req, res) => {
             rating: gameData.total_rating !== undefined ? Math.floor(gameData.total_rating / 20) : "-1",
             screenshots: ssUrls.length > 0 ? ssUrls : "No screenshots available"
         };
-         const saveGameDetails = await Game.create(gameDetails);
-         res.json(saveGameDetails);
+         const savedGameDetails = await Game.create(gameDetails);
+        res.json(savedGameDetails);
     } catch (error) {
         console.error('Error fetching game data:', error.response ? error.response.data : error.message);
         res.status(500).send({error: error.message});
     }
 };
 
+//Method for the search feature
 exports.searchGames = async (req, res) => {
     try{
         const { query } = req.query;

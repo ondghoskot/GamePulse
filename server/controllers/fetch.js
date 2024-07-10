@@ -5,14 +5,17 @@ const headers = {
     "Client-ID": process.env.CLIENT_ID,
     "Authorization": `Bearer ${process.env.AUTHORIZATION}`
 };
-
 const URL = process.env.IGDB_API_URL;
 
+// function to fetch the names of genres of a game from /genres endpoint
 const fetchGenreNames = async (genreIds, headers) => {
     try {
         const response = await axios.post(
+            //endpoint
             `${URL}/genres`,
+            //IGDB query
             `fields name; where id = (${genreIds.join(",")});`,
+            //keys to access the info
             { headers }
         );
         return response.data.reduce((acc, genre) => {
@@ -25,6 +28,7 @@ const fetchGenreNames = async (genreIds, headers) => {
     }
 };
 
+// function to fetch the names of platforms of a game from /platforms endpoint
 const fetchPlatformNames = async (platformIds, headers) => {
     try {
         const response = await axios.post(
@@ -42,6 +46,7 @@ const fetchPlatformNames = async (platformIds, headers) => {
     }
 };
 
+// function to fetch the cover images of a game from /covers endpoint
 const fetchCovers = async (coverIds) => {
     try {
         const response = await axios.post(
@@ -62,6 +67,7 @@ const fetchCovers = async (coverIds) => {
     }
 };
 
+// function to fetch a single cover image of a game from /covers endpoint
 const fetchCover = async (coverId) => {
     try {
         const response = await axios.post(
@@ -83,6 +89,7 @@ const fetchCover = async (coverId) => {
     }
 };
 
+// function to fetch screenshots of gameplay from a game from /screenshots endpoint
 const fetchSs = async (ssIds) => {
     try {
         const response = await axios.post(
