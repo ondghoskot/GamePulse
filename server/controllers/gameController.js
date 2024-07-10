@@ -10,6 +10,22 @@ const headers = {
 };
 const URL = process.env.IGDB_API_URL;
 
+async function removeDuplicates() {
+    try {
+
+        // Find all documents and remove duplicates based on 'id'
+        const cursor = Game.find({}, { id: 1 }).sort({ _id: 1 }).cursor();
+
+        for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
+            await Game.deleteMany({ _id: { $gt: doc._id }, id: doc.id });
+        }
+
+        console.log('Duplicates removed successfully.');
+    } catch (error) {
+        console.error('Error removing duplicates:', error);
+    }
+}
+
 // Method to return the newest games from IGDB to display in the main slider of the app
 exports.getGames = async (req, res) => {
     try {
@@ -25,13 +41,6 @@ exports.getGames = async (req, res) => {
             { headers }
         );
         const gamesData = response.data;
-
-        // Extract IDs for existing checks and fetch names
-        const gameIds = gamesData.map(game => game.id);
-        const existingGames = await Game.find({ id: { $in: gameIds } });
-
-        // Convert existing game IDs to a Set for quick lookup
-        const existingGameIds = new Set(existingGames.map(game => game.id));
         
         //turn Ids into names
         const genreIds = [...new Set(gamesData.flatMap(game => game.genres || []))];
@@ -43,9 +52,7 @@ exports.getGames = async (req, res) => {
         const coverUrls = await fetchCovers(coverIds);
 
         //structure the returned game object
-        const newGames = gamesData
-        .filter(game => !existingGameIds.has(game.id))
-        .map(game => {
+        const saveGames = gamesData.filter(game => !existingGameIds.includes(game.id)).map(game => {
             return {
                 id: game.id,
                 title: game.name,
@@ -59,12 +66,11 @@ exports.getGames = async (req, res) => {
          });
 
         //save games in database
-        if (newGames.length > 0) {
-            await Game.insertMany(newGames);
-        }
+        await Game.insertMany(saveGames);
+        removeDuplicates();
 
         //return saved games upon request
-         res.json(newGames);
+         res.json(saveGames);
 
     } catch (error) {
         res.status(500).send({error: error.message});
@@ -81,13 +87,6 @@ exports.getMostPlayed = async (req, res) => {
         );
         const gamesData = response.data;
 
-        // Extract IDs for existing checks and fetch names
-        const gameIds = gamesData.map(game => game.id);
-        const existingGames = await Game.find({ id: { $in: gameIds } });
-
-        // Convert existing game IDs to a Set for quick lookup
-        const existingGameIds = new Set(existingGames.map(game => game.id));
-
         const genreIds = [...new Set(gamesData.flatMap(game => game.genres || []))];
         const platformIds = [...new Set(gamesData.flatMap(game => game.platforms || []))];
         const coverIds = [...new Set(gamesData.map(game => game.cover).filter(Boolean))];
@@ -96,9 +95,7 @@ exports.getMostPlayed = async (req, res) => {
         const platformNames = await fetchPlatformNames(platformIds, headers);
         const coverUrls = await fetchCovers(coverIds);
 
-        const newGames = gamesData
-        .filter(game => !existingGameIds.has(game.id))
-        .map(game => {
+        const saveGames = gamesData.map(game => {
             return {
                 id: game.id,
                 title: game.name,
@@ -112,12 +109,10 @@ exports.getMostPlayed = async (req, res) => {
             }
          });
 
-        //save games in database
-        if (newGames.length > 0) {
-            await Game.insertMany(newGames);
-        }
+         await Game.insertMany(saveGames);
+         removeDuplicates();
 
-         res.json(newGames);
+         res.json(saveGames);
 
     } catch (error) {
         res.status(500).send({error: error.message});
@@ -134,13 +129,6 @@ exports.getTopRated = async (req, res) => {
         );
         const gamesData = response.data;
 
-        // Extract IDs for existing checks and fetch names
-        const gameIds = gamesData.map(game => game.id);
-        const existingGames = await Game.find({ id: { $in: gameIds } });
-
-        // Convert existing game IDs to a Set for quick lookup
-        const existingGameIds = new Set(existingGames.map(game => game.id));
-
         const genreIds = [...new Set(gamesData.flatMap(game => game.genres || []))];
         const platformIds = [...new Set(gamesData.flatMap(game => game.platforms || []))];
         const coverIds = [...new Set(gamesData.map(game => game.cover).filter(Boolean))];
@@ -149,9 +137,7 @@ exports.getTopRated = async (req, res) => {
         const platformNames = await fetchPlatformNames(platformIds, headers);
         const coverUrls = await fetchCovers(coverIds);
 
-        const newGames = gamesData
-        .filter(game => !existingGameIds.has(game.id))
-        .map(game => {
+        const saveGames = gamesData.map(game => {
             return {
                 id: game.id,
                 title: game.name,
@@ -164,12 +150,10 @@ exports.getTopRated = async (req, res) => {
             }
          });
 
-         //save games in database
-        if (newGames.length > 0) {
-            await Game.insertMany(newGames);
-        }
+         await Game.insertMany(saveGames);
+         removeDuplicates();
 
-         res.json(newGames);
+         res.json(saveGames);
 
     } catch (error) {
         res.status(500).send({error: error.message});
@@ -179,14 +163,6 @@ exports.getTopRated = async (req, res) => {
 //Method for another page (games/:id) to get game details upon clicking on a game
 exports.getGameDetails = async (req, res) => {
     try {
-        const gameId = req.params.id;
-        const existingGame = await Game.findOne({ id: gameId });
-
-        // If game exists in the database, return it
-        if (existingGame) {
-            return res.json(existingGame);
-        }
-
         const response = await axios.post(
             `${URL}/games`,
             `fields name, first_release_date, genres, platforms, summary, storyline, total_rating, cover, screenshots; where id = ${req.params.id};`,
@@ -215,8 +191,9 @@ exports.getGameDetails = async (req, res) => {
             rating: gameData.total_rating !== undefined ? Math.floor(gameData.total_rating / 20) : "-1",
             screenshots: ssUrls.length > 0 ? ssUrls : "No screenshots available"
         };
-         const savedGameDetails = await Game.create(gameDetails);
-        res.json(savedGameDetails);
+         const saveGameDetails = await Game.create(gameDetails);
+         removeDuplicates();
+         res.json(saveGameDetails);
     } catch (error) {
         console.error('Error fetching game data:', error.response ? error.response.data : error.message);
         res.status(500).send({error: error.message});

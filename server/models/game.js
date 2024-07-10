@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 
 const gameSchema = mongoose.Schema({
-    //id: Number,
     title: String,
     img: String,
     releaseDate: Date,
@@ -11,7 +10,8 @@ const gameSchema = mongoose.Schema({
     storyline: String,
     rating: Number,
     screenshots: [String],
-    reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review"}]
+    reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review"}],
+    id: Number
 });
 
 gameSchema.index({
