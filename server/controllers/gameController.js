@@ -93,7 +93,7 @@ exports.getMostPlayed = async (req, res) => {
          });
 
          await Game.insertMany(saveGames);
-         removeDuplicates();
+
 
          res.json(saveGames);
 
@@ -134,8 +134,6 @@ exports.getTopRated = async (req, res) => {
          });
 
          await Game.insertMany(saveGames);
-         removeDuplicates();
-
          res.json(saveGames);
 
     } catch (error) {
@@ -175,7 +173,6 @@ exports.getGameDetails = async (req, res) => {
             screenshots: ssUrls.length > 0 ? ssUrls : "No screenshots available"
         };
          const saveGameDetails = await Game.create(gameDetails);
-         removeDuplicates();
          res.json(saveGameDetails);
     } catch (error) {
         console.error('Error fetching game data:', error.response ? error.response.data : error.message);
