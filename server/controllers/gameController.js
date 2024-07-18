@@ -10,22 +10,6 @@ const headers = {
 };
 const URL = process.env.IGDB_API_URL;
 
-async function removeDuplicates() {
-    try {
-
-        // Find all documents and remove duplicates based on 'id'
-        const cursor = Game.find({}, { id: 1 }).sort({ _id: 1 }).cursor();
-
-        for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
-            await Game.deleteMany({ _id: { $gt: doc._id }, id: doc.id });
-        }
-
-        console.log('Duplicates removed successfully.');
-    } catch (error) {
-        console.error('Error removing duplicates:', error);
-    }
-}
-
 // Method to return the newest games from IGDB to display in the main slider of the app
 exports.getGames = async (req, res) => {
     try {
@@ -52,7 +36,7 @@ exports.getGames = async (req, res) => {
         const coverUrls = await fetchCovers(coverIds);
 
         //structure the returned game object
-        const saveGames = gamesData.filter(game => !existingGameIds.includes(game.id)).map(game => {
+        const saveGames = gamesData.map(game => {
             return {
                 id: game.id,
                 title: game.name,
@@ -67,7 +51,6 @@ exports.getGames = async (req, res) => {
 
         //save games in database
         await Game.insertMany(saveGames);
-        removeDuplicates();
 
         //return saved games upon request
          res.json(saveGames);
