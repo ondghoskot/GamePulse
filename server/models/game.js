@@ -12,7 +12,7 @@ const gameSchema = mongoose.Schema({
     rating: Number,
     screenshots: [String],
     reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review"}],
-    id: Number
+    //id: Number
 });
 
 //indexing for search feature
